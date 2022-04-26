@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .h-100 {
+        height: 100% !important;
+      }
+
+      .container {
+        margin: auto;
+        position: relative;
+        background: url('photo-1611329532872-5156a808c731.jpg') no-repeat center center / cover;
+      }
+
+      .clock {
+        margin: auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .clock-border {
+        width: 500px;
+        height: 600px;
+        border: 20px solid #031927;
+        position: relative;
+        filter: drop-shadow(0 0 0.75rem rgba(17, 28, 50, 0.2))
+          drop-shadow(0 0 0.75rem rgba(17, 28, 50, 0.3));
+        box-shadow: 1px 1px 1px 1px #f1f5f4, -1px -1px 1px 1px #f1f5f4;
+      }
+
+      .clock-border::before {
+        content: '';
+        width: 200px;
+        height: 200px;
+        background: #ba1200;
+        position: absolute;
+        left: -3%;
+        top: -3%;
+        filter: drop-shadow(5px 5px 0.5rem rgba(18, 12, 12, 0.5));
+        box-shadow: -1px -1px 0.5px 0.5px #ff8484;
+      }
+
+      .clock-border::after {
+        content: '';
+        width: 490px;
+        height: 100px;
+        background: #28afb0;
+        position: absolute;
+        right: -3%;
+        bottom: 10%;
+        z-index: -1;
+        filter: drop-shadow(5px 5px 0.5rem rgba(13, 12, 18, 0.5));
+        box-shadow: 1px 1px 0.5px 0.5px #dae2e7, -1px -1px 0.5px 0.5px #dae2e7;
+      }
+
+      .clock-box {
+        width: 350px;
+        height: 515px;
+        background: #031927;
+        position: absolute;
+        left: 50%;
+        top: 10%;
+        transform: translate(-50%);
+        filter: drop-shadow(5px 5px 0.75rem rgba(66, 70, 81, 0.3))
+          drop-shadow(1px 1px 0.3rem rgba(55, 55, 83, 0.5));
+        box-shadow: -1px -1px 1px 1px #f1f5f4;
+      }
+      .clock-box::before {
+        content: '';
+        width: 60%;
+        height: 10px;
+        background: #1a936f;
+        position: absolute;
+        right: 1%;
+        bottom: 20%;
+      }
+
+      #clock-hourId {
+        width: 40%;
+        height: 30px;
+        background: #ffbe0b;
+        position: absolute;
+        top: calc(50% - 40px);
+        left: calc(50% - 80px);
+        transform-origin: 20% center;
+      }
+      #clock-hourId::before {
+        content: '';
+        width: 20%;
+        height: 30px;
+        position: absolute;
+        background: #fff;
+        left: 80%;
+      }
+
+      #clock-minuteId {
+        width: 60%;
+        height: 30px;
+        background: #1a936f;
+        position: absolute;
+        top: calc(50% - 40px);
+        left: calc(50% - 80px);
+        transform-origin: 20% center;
+      }
+
+      #clock-minuteId::before {
+        content: '';
+        width: 10%;
+        height: 30px;
+        position: absolute;
+        background: #fff;
+        left: 90%;
+      }
+      .clock-point {
+        width: 20px;
+        height: 20px;
+        background: #031927;
+        position: absolute;
+        border-radius: 50%;
+        bottom: 53%;
+        left: 42%;
+        z-index: 3;
+      }
+
+      #digital-clockId {
+        width: 800px;
+        position: absolute;
+        bottom: 5%;
+        left: 56%;
+        transform: translateX(-45%) translateY(-5%);
+        font-size: 80px;
+        letter-spacing: 10px;
+        font-family: Orbitron;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container h-100">
+      <div class="clock">
+        <div class="clock-border">
+          <div class="clock-box"></div>
+          <div id="clock-hourId"></div>
+          <div id="clock-minuteId"></div>
+          <div class="clock-point"></div>
+        </div>
+      </div>
+      <div id="digital-clockId" onload="startTime()"></div>
+    </div>
+      </div>
+    </div>
+    <script>
+      const elHours = document.getElementById('clock-hourId')
+      const elMinutes = document.getElementById('clock-minuteId')
+      function update() {
+        const time = new Date()
+        const hr = time.getHours()
+        const min = time.getMinutes()
+
+        const hoursDeg = (hr / 12) * 360 - 90
+        const minutesDeg = (min / 60) * 360 - 90
+
+        elHours.style.transform = `rotate(${hoursDeg}deg)`
+        elMinutes.style.transform = `rotate(${minutesDeg}deg)`
+      }
+      update()
+
+      setInterval(update, 1000)
+
+      function startTime() {
+        const date = new Date()
+        const hh = date.getHours()
+        const mm = date.getMinutes()
+        const ss = date.getSeconds()
+
+        document.getElementById('digital-clockId').innerHTML =
+          zeroId(hh) + ':' + zeroId(mm) + ':' + zeroId(ss)
+        const setTime = setTimeout(startTime, 1000)
+
+        function zeroId(zeroPut) {
+          if (zeroPut < 10) {
+            zeroPut = '0' + zeroPut
+          }
+          return zeroPut
+        }
+      }
+      startTime()
+
+
+    </script>
+  </body>
+</html>
